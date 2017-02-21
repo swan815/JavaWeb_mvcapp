@@ -12,7 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.lsy.mvcapp.dao.CriteriaCustomer;
 import com.lsy.mvcapp.dao.CustomerDAO;
+import com.lsy.mvcapp.dao.factory.CustomerDAOFactory;
 import com.lsy.mvcapp.dao.impl.CustomerDAOJdbcImpl;
+import com.lsy.mvcapp.dao.impl.CustomerDAOXMLImpl;
 import com.lsy.mvcapp.domain.Customer;
 
 /**
@@ -22,7 +24,7 @@ import com.lsy.mvcapp.domain.Customer;
 public class CustomerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	CustomerDAO customerDAO=new CustomerDAOJdbcImpl();
+	CustomerDAO customerDAO= new CustomerDAOJdbcImpl();
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
