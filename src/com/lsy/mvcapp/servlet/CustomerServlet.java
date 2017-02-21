@@ -109,19 +109,43 @@ public class CustomerServlet extends HttpServlet {
 	}
 	private void editCustomer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		String forwardPath = null;
+		String forwardPath = "/error.jsp";
 		//1.获取请求参数
 		String idStr=request.getParameter("id");
+		//System.out.println(idStr);
 		//2.调用CustoemrDAO的customerDAO.get(id)的方法
 		try {
+			//3.将customer放入request中	
 			Customer customer = customerDAO.get(Integer.parseInt(idStr));
+			//System.out.println(customer);
 			if(customer !=null){
 				forwardPath="/updateCustomer.jsp";
 				request.setAttribute("customer", customer);
 			}
-		} catch (NumberFormatException e) {
+		} catch (NumberFormatException e) {}
+			request.getRequestDispatcher(forwardPath).forward(request, response);
+	}
+	private void updateCustomer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		String id=request.getParameter("id");
+		String name=request.getParameter("name");
+		//System.out.println(name);
+		String address=request.getParameter("address");
+		String phone=request.getParameter("phone");
+		String oldName=request.getParameter("oldName");
+		//System.out.println(oldName);
+		if(!oldName.equalsIgnoreCase(name)){
+			long count = customerDAO.getCount(name);
+			//System.out.println(count);
+			if(count > 0){
+				request.setAttribute("message", "用户名"+name+"已经被占用，请重新选择！");
+				request.getRequestDispatcher("/updateCustomer.jsp").forward(request, response);
+				return;
+			}
 		}
-		//3.将customer放入request中		
+		Customer customer=new Customer(name,address,phone);
+		customer.setId(Integer.parseInt(id));
+		customerDAO.update(customer);
+		response.sendRedirect("queryCustomer.do");
 	}
 
 }
